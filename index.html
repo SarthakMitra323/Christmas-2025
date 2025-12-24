@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merry Christmas | From Anusha</title>
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎄</text></svg>">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP for Billion-Dollar Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Great+Vibes&family=Inter:wght@300;400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            100: '#F9F1D8',
+                            300: '#EAD69E',
+                            400: '#D4AF37', 
+                            500: '#B38F23',
+                            600: '#8A6D1B',
+                        },
+                        midnight: '#02040a',
+                        paper: '#fdfbf7',
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        cinzel: ['Cinzel', 'serif'],
+                        script: ['Great Vibes', 'cursive'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'shine': 'shine 8s linear infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'bounce-slow': 'bounce 2s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        shine: {
+                            '0%': { backgroundPosition: '200% center' },
+                            '100%': { backgroundPosition: '-200% center' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- CORE STYLES --- */
+        body {
+            background-color: #02040a;
+            overflow: hidden; /* Locked until opened */
+            cursor: default;
+        }
+
+        body.unlocked {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* --- LOADER STYLES (NEW) --- */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #02040a;
+            z-index: 99999; /* Highest priority to cover everything */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .loader-text {
+            font-family: 'Cinzel', serif;
+            color: #D4AF37;
+            letter-spacing: 0.5em;
+            font-size: 1rem;
+            opacity: 0; 
+            margin-bottom: 20px;
+        }
+        .loader-bar-bg {
+            width: 150px;
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .loader-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: #D4AF37;
+        }
+
+        /* --- CURTAIN REVEAL --- */
+        #curtain-layer {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            pointer-events: none; 
+        }
+
+        .curtain-panel {
+            width: 51vw; 
+            height: 100vh;
+            background: #050A14;
+            position: relative;
+            z-index: 2;
+            transition: transform 2.5s cubic-bezier(0.77, 0, 0.175, 1);
+            display: flex;
+            align-items: center;
+        }
+
+        .curtain-panel::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,0.01) 41px, transparent 42px);
+            opacity: 0.3;
+        }
+
+        .left-panel { transform-origin: left; justify-content: flex-end; }
+        .right-panel { transform-origin: right; justify-content: flex-start; }
+
+        body.open .left-panel { transform: translateX(-100%); }
+        body.open .right-panel { transform: translateX(100%); }
+
+        #enter-experience {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            pointer-events: auto;
+            text-align: center;
+            width: 100%;
+            padding: 0 20px;
+            opacity: 0; /* Hidden initially, shown via JS after loader */
+        }
+
+        body.open #enter-experience {
+            opacity: 0 !important;
+            transform: translate(-50%, -50%) scale(1.5);
+            pointer-events: none;
+        }
+
+        /* --- TEXT & ANIMATIONS --- */
+        .text-gradient-gold {
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 200% auto;
+            animation: shine 5s linear infinite;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- STABLE CARD 3D STYLES --- */
+        .card-perspective-container {
+            perspective: 2000px; /* High perspective for realism */
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .card-wrapper {
+            position: relative;
+            /* STRICT DIMENSIONS TO PREVENT TEXT GLITCHES */
+            width: 340px; 
+            height: 520px;
+            transform-style: preserve-3d;
+        }
+
+        @media (min-width: 768px) {
+            .card-wrapper {
+                width: 500px;
+                height: 650px;
+            }
+        }
+
+        /* THE COVER (Front) */
+        .card-cover {
+            position: absolute;
+            inset: 0;
+            transform-origin: left center; /* CRITICAL for book opening */
+            z-index: 20;
+            backface-visibility: hidden; /* Prevents flickering */
+            border-radius: 12px;
+            
+            /* Visuals */
+            background-color: #050505;
+            background-image: 
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E"),
+                linear-gradient(145deg, #151515 0%, #050505 100%);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 5px 10px 30px rgba(0,0,0,0.5);
+            
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-cover::after {
+            content: '';
+            position: absolute;
+            inset: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            border-radius: 8px;
+        }
+
+        /* THE INSIDE (Back/Content) */
+        .card-inside {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            border-radius: 12px;
+            background: #fdfbf7;
+            background-image: url("https://www.transparenttextures.com/patterns/cream-paper.png");
+            box-shadow: 
+                inset 5px 0 20px rgba(0,0,0,0.05), /* Spine shadow */
+                10px 10px 40px rgba(0,0,0,0.4);
+            
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            transform: translateZ(0); /* Rendering optimization */
+        }
+
+        /* Font classes */
+        .font-handwriting {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #02040a; }
+        ::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
+    </style>
+</head>
+<body class="antialiased text-gray-300 selection:bg-gold-500 selection:text-black">
+
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <div class="loader-text">LOADING</div>
+        <div class="loader-bar-bg">
+            <div class="loader-bar"></div>
+        </div>
+    </div>
+
+    <div class="noise-overlay"></div>
+
+    <!-- CURTAIN & ENTER BUTTON -->
+    <div id="curtain-layer">
+        <div class="curtain-panel left-panel"></div>
+        <div class="curtain-panel right-panel"></div>
+    </div>
+
+    <div id="enter-experience">
+        <div class="flex flex-col items-center group">
+            <div class="relative w-20 h-20 md:w-24 md:h-24 mb-6 flex items-center justify-center cursor-pointer transition-transform duration-300 hover:scale-110 active:scale-95" onclick="startExperience()">
+                <div class="absolute inset-0 rounded-full border border-white/10 animate-scale-pulse"></div>
+                <div class="absolute inset-2 rounded-full border border-gold-500/30 animate-spin-slow border-dashed"></div>
+                <div class="absolute inset-0 rounded-full bg-gold-500/10 blur-xl group-hover:bg-gold-500/20 transition-all duration-500"></div>
+                <i class="fa-solid fa-envelope-open-text text-2xl md:text-3xl text-gold-400 drop-shadow-[0_0_10px_rgba(212,175,55,0.5)]"></i>
+            </div>
+            
+            <h2 class="font-cinzel text-white text-lg md:text-xl tracking-[0.2em] group-hover:text-gold-300 transition-colors">ANUSHA</h2>
+            <div class="h-[1px] w-0 bg-gold-400 mt-2 group-hover:w-full transition-all duration-700 ease-out"></div>
+            <p class="font-sans text-[10px] text-white/40 mt-3 tracking-widest uppercase group-hover:text-white/70 transition-colors">Click Icon to Open</p>
+        </div>
+    </div>
+
+    <!-- CANVAS (Snow) -->
+    <canvas id="snowCanvas" class="fixed inset-0 w-full h-full pointer-events-none z-10"></canvas>
+
+    <!-- CONTENT WRAPPER -->
+    <main class="relative z-20 w-full min-h-screen">
+        
+        <!-- NAVIGATION -->
+        <nav class="fixed top-0 w-full p-6 md:p-8 z-50 flex justify-between items-center opacity-0 transition-opacity duration-1000 delay-1000" id="main-nav">
+            <div class="text-[10px] md:text-xs font-cinzel tracking-[0.2em] text-gold-300">EST. 2025</div>
+            <div class="hidden md:block text-xs font-cinzel tracking-[0.2em] text-white/30">MERRY CHRISTMAS</div>
+        </nav>
+
+        <!-- HERO SECTION -->
+        <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 relative overflow-hidden">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] md:w-[60vw] md:h-[60vw] bg-blue-900/20 rounded-full blur-[80px] md:blur-[100px] pointer-events-none"></div>
+
+            <div class="relative z-10 space-y-2 mt-10 md:mt-16"> 
+                <p class="font-cinzel text-gold-500 tracking-[0.5em] text-[10px] md:text-sm mb-6 reveal delay-1000">DECEMBER 25TH</p>
+                
+                <h1 class="font-serif text-5xl md:text-8xl lg:text-9xl text-white leading-[0.9] reveal delay-[1200ms]">
+                    Merry
+                </h1>
+                <h1 class="font-serif italic text-5xl md:text-8xl lg:text-9xl text-gradient-gold leading-[1.1] reveal delay-[1400ms] pb-4">
+                    Christmas
+                </h1>
+
+                <p class="font-sans text-white/50 max-w-[90%] md:max-w-md mx-auto leading-6 md:leading-7 mt-6 md:mt-8 text-xs md:text-base font-light reveal delay-[1600ms]">
+                    May the melody and spirit of the holidays fill your home with love and peace.
+                </p>
+
+                <div class="pt-16 md:pt-20 reveal delay-[1800ms]">
+                     <div class="animate-bounce-slow text-gold-400/80 cursor-pointer" onclick="window.scrollTo({top: window.innerHeight, behavior: 'smooth'})">
+                        <i class="fa-solid fa-chevron-down text-xl md:text-2xl hover:text-white transition-colors"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ORNAMENTS SECTION -->
+        <section class="py-24 px-4 relative border-t border-white/5 bg-gradient-to-b from-transparent to-[#050A14]">
+            <div class="max-w-5xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                    <!-- Joy -->
+                    <div class="reveal group">
+                        <div class="mb-6 transform group-hover:-translate-y-2 transition-transform duration-500">
+                            <i class="fa-solid fa-star text-4xl text-gold-500/50 group-hover:text-gold-400 transition-colors"></i>
+                        </div>
+                        <h3 class="font-cinzel text-white text-xl mb-3 tracking-widest">Joy</h3>
+                        <div class="w-8 h-[1px] bg-gold-500/30 mx-auto mb-4"></div>
+                        <p class="text-white/40 text-sm font-light leading-relaxed max-w-xs mx-auto">
+                            Finding happiness in the simplest moments and sharing smiles that light up the dark.
+                        </p>
+                    </div>
+                     <!-- Love -->
+                     <div class="reveal delay-100 group">
+                        <div class="mb-6 transform group-hover:-translate-y-2 transition-transform duration-500">
+                            <i class="fa-solid fa-heart text-4xl text-gold-500/50 group-hover:text-gold-400 transition-colors"></i>
+                        </div>
+                        <h3 class="font-cinzel text-white text-xl mb-3 tracking-widest">Love</h3>
+                        <div class="w-8 h-[1px] bg-gold-500/30 mx-auto mb-4"></div>
+                        <p class="text-white/40 text-sm font-light leading-relaxed max-w-xs mx-auto">
+                            Warmth that gathers around the fireplace and lives in the hearts of those we cherish.
+                        </p>
+                    </div>
+                     <!-- Peace -->
+                     <div class="reveal delay-200 group">
+                        <div class="mb-6 transform group-hover:-translate-y-2 transition-transform duration-500">
+                            <i class="fa-solid fa-dove text-4xl text-gold-500/50 group-hover:text-gold-400 transition-colors"></i>
+                        </div>
+                        <h3 class="font-cinzel text-white text-xl mb-3 tracking-widest">Peace</h3>
+                        <div class="w-8 h-[1px] bg-gold-500/30 mx-auto mb-4"></div>
+                        <p class="text-white/40 text-sm font-light leading-relaxed max-w-xs mx-auto">
+                            A silent night, a holy night, wishing for a world at rest and full of hope.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SANTA SECTION -->
+        <section class="py-20 md:py-32 px-4 relative z-10 overflow-hidden">
+             <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12 md:gap-20">
+                <div class="w-full md:w-1/2 reveal">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 group aspect-[4/5] md:aspect-square">
+                        <img src="Saint Nicholas.jpg" 
+                             alt="Santa Claus" 
+                             class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-[1.5s] ease-out opacity-80 group-hover:opacity-100">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#02040a] via-transparent to-transparent opacity-80"></div>
+                        <div class="absolute bottom-6 left-6 right-6">
+                            <p class="font-cinzel text-gold-400 text-xs tracking-widest mb-1">THE LEGEND</p>
+                            <p class="font-serif text-white text-lg italic">Saint Nicholas</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full md:w-1/2 text-center md:text-left reveal delay-200">
+                     <div class="hidden md:block w-12 h-[1px] bg-gold-500 mb-8"></div>
+                     <h2 class="font-cinzel text-3xl md:text-5xl text-white mb-8 leading-tight">
+                         The Magic of <br/> <span class="text-gold-400">Believing</span>
+                     </h2>
+                     <p class="font-sans text-white/60 leading-relaxed mb-6 font-light text-sm md:text-base">
+                         Beyond the red suit and the sleigh, Santa Claus embodies the timeless spirit of generosity. He represents the quiet magic that turns a cold winter night into a memory of warmth.
+                     </p>
+                     
+                     <div class="inline-block border border-gold-500/30 px-6 py-3 rounded-full mt-8">
+                         <span class="font-serif italic text-gold-300 text-sm">"Believe in the magic."</span>
+                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CARD SECTION (GSAP PINNED) -->
+        <section id="card-section" class="card-perspective_container relative min-h-screen flex items-center justify-center overflow-hidden">
+            <!-- Decorative BG -->
+            <div class="absolute top-0 right-0 w-64 h-64 md:w-96 md:h-96 bg-gold-600/5 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 md:w-96 md:h-96 bg-gold-600/5 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2 pointer-events-none"></div>
+
+            <!-- Scroll Hint -->
+             <div class="absolute top-24 left-1/2 -translate-x-1/2 text-white/30 text-xs tracking-[0.3em] uppercase animate-bounce pointer-events-none" id="scroll-hint">
+                Scroll to Open
+            </div>
+
+            <!-- THE CARD -->
+            <div class="card-wrapper" id="the-card">
+                
+                <!-- COVER -->
+                <div class="card-cover">
+                    <div class="w-20 h-20 mx-auto border-2 border-gold-400/60 rounded-full flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-snowflake text-4xl text-gold-400 animate-spin-slow"></i>
+                    </div>
+                    <h3 class="font-cinzel text-2xl text-gold-100 tracking-[0.25em] uppercase mb-2 drop-shadow-lg">A Wish</h3>
+                    <div class="w-16 h-[1px] bg-gold-500 mx-auto my-4"></div>
+                    <p class="font-sans text-gold-300/60 text-xs tracking-[0.3em] uppercase">For You</p>
+                </div>
+
+                <!-- INSIDE -->
+                <div class="card-inside">
+                    <div class="w-16 h-16 rounded-full border border-gold-400/50 flex items-center justify-center mb-6 md:mb-10">
+                        <i class="fa-solid fa-gift text-2xl text-gold-600"></i>
+                    </div>
+                    
+                    <h4 class="font-cinzel text-xs md:text-sm text-gold-600 tracking-[0.3em] uppercase mb-4 md:mb-8">Season's Greetings</h4>
+                    
+                    <p class="font-serif text-xl md:text-3xl text-gray-800 leading-relaxed italic mb-8">
+                        "May your world be filled with warmth and good cheer this Holy season, and throughout the year."
+                    </p>
+
+                    <div class="mt-auto pb-4">
+                        <p class="font-sans text-[10px] md:text-xs text-gray-400 tracking-[0.2em] uppercase mb-3">Sent With Love</p>
+                        <span class="font-handwriting text-5xl md:text-6xl text-gold-600 transform -rotate-2 block">
+                            Anusha
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="py-10 md:py-12 border-t border-white/5 text-center relative z-10 bg-[#02040a]">
+            <p class="font-cinzel text-[10px] md:text-xs text-gold-500/50 tracking-[0.2em] mb-4">FROM ANUSHA</p>
+            <p class="font-sans text-[8px] md:text-[9px] text-white/20 tracking-widest uppercase">
+                Crafted by Sarthak
+            </p>
+        </footer>
+
+    </main>
+
+    <script>
+        function startExperience() {
+            document.body.classList.add('open');
+            document.body.classList.add('unlocked');
+            document.getElementById('main-nav').style.opacity = '1';
+            setTimeout(() => {
+                initReveal();
+            }, 800);
+        }
+
+        function initReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.1, 
+                rootMargin: "0px 0px -50px 0px"
+            });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // --- LOADER LOGIC ---
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline();
+
+            // 1. Text fades in
+            tl.to(".loader-text", {
+                opacity: 1,
+                duration: 1
+            })
+            // 2. Bar fills
+            .to(".loader-bar", {
+                width: "100%",
+                duration: 1.5,
+                ease: "power2.inOut"
+            })
+            // 3. Fade out loader & Show Revealer
+            .to("#preloader", {
+                opacity: 0,
+                duration: 1,
+                onComplete: () => {
+                    document.getElementById("preloader").style.display = "none";
+                    // Reveal the "Icon to Open" button nicely
+                    gsap.to("#enter-experience", {
+                        opacity: 1,
+                        duration: 1,
+                        ease: "power2.out"
+                    });
+                }
+            });
+        });
+
+        // --- GSAP CARD ANIMATION ---
+        document.addEventListener("DOMContentLoaded", (event) => {
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // Reference: card-section is the trigger/pin
+            // We animate card-cover and card-inside within that context
+            
+            let cardTimeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#card-section",
+                    start: "top top", 
+                    end: "+=1500",    
+                    scrub: 1,         
+                    pin: true,        
+                    anticipatePin: 1
+                }
+            });
+
+            // 1. Open the cover like a book
+            cardTimeline.to(".card-cover", {
+                rotateY: -180,
+                duration: 2,
+                ease: "power2.inOut"
+            });
+
+            // 2. Fade out cover for dissolve effect
+            cardTimeline.to(".card-cover", {
+                opacity: 0,
+                duration: 1.5,
+                delay: 0.2 // Wait a tiny bit before fading
+            }, "<"); // Run alongside previous animation
+            
+            // 3. Scale up Inside content for emphasis
+            cardTimeline.from(".card-inside", {
+                scale: 0.9,
+                duration: 2
+            }, "<");
+
+            // 4. Hide Hint
+            cardTimeline.to("#scroll-hint", {
+                opacity: 0,
+                duration: 0.5
+            }, 0);
+        });
+
+        // Snow System
+        const canvas = document.getElementById('snowCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * -height;
+                this.vy = 0.2 + Math.random() * 0.8; 
+                this.size = Math.random() * 2;
+                this.opacity = Math.random() * 0.5 + 0.1;
+                this.drift = (Math.random() - 0.5) * 0.2;
+            }
+            update() {
+                this.y += this.vy;
+                this.x += this.drift;
+                if (this.y > height) this.reset();
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for(let i=0; i<100; i++) particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => { resize(); initParticles(); });
+        resize();
+        initParticles();
+        animate();
+    </script>
+</body>
+</html>
